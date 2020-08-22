@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Type To The Rhythm</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="machine-container">
+    <div id="from-box" class="wide-100">
+        <div id="from-text-box">
+            <p class="text"><span id="nameMessage" class="text-name">Steven Wilson </span> says:</p>
+        </div>
+    </div>
+    <div id="message-box" class="wide-100">
+        <p class="text"><span id="textMessage" class="text-msg">"one of the wonder of the world"</span></p></div>
+    <div id="tracks-box" class="wide-100">
+        <div class="single-track-box">
+            <span class="track-name">BASS</span>
+            <div id="track1" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">KICK</span>
+            <div id="track2" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">SNARE</span>
+            <div id="track3" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">HATS</span>
+            <div id="track4" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">PAD</span>
+            <div id="track5" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">LEAD</span>
+            <div id="track6" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">FX</span>
+            <div id="track7" class="track-step"></div>
+        </div>
+        <div class="single-track-box">
+            <span class="track-name">PERC</span>
+            <div id="track8" class="track-step"></div>
+        </div>
+    </div>
+</div>
+<div id="side-container">
+    <button id="btnstart">START</button>
+    <button id="btnstop">STOP</button>
+    <br>
+    <button id="btnStartActx">START CTX</button>
+    <br>
+    <button id="btnBass">BASS</button>
+    <button id="btnKick">KICK</button>
+    <button id="btnSnare">SNARE</button>
+    <button id="btnHats">HATS</button>
+    <button id="btnPad">PAD</button>
+    <button id="btnLead">LEAD</button>
+    <button id="btnFx">FX</button>
+    <button id="btnPerc">PERC</button>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+
+<script src="assets/scripts/controller.js"></script>
+<script src="assets/scripts/synth.js"></script>
+
+</body>
+</html>
