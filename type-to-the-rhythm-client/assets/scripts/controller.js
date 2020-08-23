@@ -1,15 +1,18 @@
 var count = 0;
-var bpm = 60;
+var bpm = 80 * 4;
 var messageStack = [{
     from: "Steven Wilson",
-    text: "one of the wonder of the world",
+    text: "one of the wonder of the world going",
 }]
 var db
 var message
 var trackSteps, steps, bar = 0
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`˜!.@#$%^&*()-_=+;\\|{}[] \":/?><".split("")
-const pitch = ""
-console.log(alphabet)
+const pitch = [-24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12]
+const triggerK = [1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0]
+const triggerS = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1]
+const triggerH = [0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1]
+const triggerP = [0, 0, 1, 0, 2, 1, 3, 0, 0, 3, 0, 5, 4, 4, 0, 0, 1, 5, 0, 0, 0, 2, 2, 0, 2, 0]
 
 btnstart.onclick = start
 
@@ -34,8 +37,11 @@ function dbConnection() {
     db = firebase.firestore();
 }
 
-function getMessages() {
+function getFrequency(semitones){
+    return 440 * Math.pow(2, semitones/12);
+}
 
+function getMessages() {
     db.collection("messages").where("read", "==", "N").orderBy("datetime", "desc").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             messageStack.push(doc.data())
@@ -76,12 +82,18 @@ function start() {
             steps[i] = (steps[i] + 1) % message[i].length;
         }
 
-        if(message[2][steps[2] - 1] === "e") playSample("snare")
-
+        playBass(getFrequency(pitch[alphabet.indexOf(trackSteps[0].innerText)])/4, 1)
+        playPad(getFrequency(pitch[alphabet.indexOf(trackSteps[4].innerText)])/2, 1)
+        playLead(getFrequency(pitch[alphabet.indexOf(trackSteps[5].innerText)]), 1)
+        if (triggerK[alphabet.indexOf(trackSteps[1].innerText)] === 1) playSample("short-kick")
+        if (triggerS[alphabet.indexOf(trackSteps[2].innerText)] === 1) playSample("snare")
+        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 1) playSample("close-hihat")
+        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 2) playSample("open-hihat")
+        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] !== 0) playSample("perc")
 
         if (count++ % 16 === 15) bar++;
         console.log("bar " + bar)
-        if (bar === 2) {
+        if (bar === 4) {
             nextMessage()
             bar = 0;
         }
