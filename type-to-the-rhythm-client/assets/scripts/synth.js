@@ -8,8 +8,10 @@ btnStartActx.onclick = function () {
 
 function initializeEnvironment() {
     c = new AudioContext()
-    loadSamples("assets/media/samples/long-kick.wav", "kick");
-    loadSamples("assets/media/samples/close-hihat.wav", "hihat");
+    loadSamples("assets/media/samples/short-kick.wav", "short-kick");
+    loadSamples("assets/media/samples/long-kick.wav", "long-kick");
+    loadSamples("assets/media/samples/open-hihat.wav", "open-hihat");
+    loadSamples("assets/media/samples/close-hihat.wav", "close-hihat");
     loadSamples("assets/media/samples/snare.wav", "snare");
     loadSamples("assets/media/samples/cow-bell.wav", "perc");
 }
@@ -19,19 +21,19 @@ function resume() {
 }
 
 btnBass.onclick = function () {
-    playBass(55 * Math.pow(2, 2 / 12), 1);
+    playBass(55, 1);
 }
 
 btnPad.onclick = function () {
-    playPad(110 * Math.pow(2, 2 / 12), 1);
+    playPad(110, 1);
 }
 
 btnLead.onclick = function () {
-    playLead(440 * Math.pow(2, 2 / 12), 1);
+    playLead(440, 1);
 }
 
 btnKick.onclick = function () {
-    playSample("kick");
+    playSample("short-kick");
 }
 
 btnSnare.onclick = function () {
@@ -39,7 +41,7 @@ btnSnare.onclick = function () {
 }
 
 btnHats.onclick = function () {
-    playSample("hihat");
+    playSample("close-hihat");
 }
 
 btnPerc.onclick = function () {
@@ -61,23 +63,25 @@ function playBass(f, duration) {
     f1.connect(c.destination)
 
     f1.frequency.value = 5000;
-    g1.gain.value = 0.5;
-    g2.gain.value = 0.5;
+    g1.gain.value = 0.1;
+    g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "triangle"
     o1.frequency.value = f;
     o2.frequency.value = 2 * f;
     f1.frequency.exponentialRampToValueAtTime(100, startTime + duration / 2)
 
+
+    g1.gain.setValueAtTime(0, startTime);
+    g1.gain.linearRampToValueAtTime(0.1, startTime + duration / 32);
+    g1.gain.linearRampToValueAtTime(0, startTime + duration)
+    g2.gain.setValueAtTime(0, startTime);
+    g2.gain.linearRampToValueAtTime(0.1, startTime + duration / 32);
+    g2.gain.linearRampToValueAtTime(0, startTime + duration)
+
     o1.start();
     o2.start();
 
-    g1.gain.setValueAtTime(0, startTime);
-    g1.gain.linearRampToValueAtTime(0.5, startTime + duration / 24);
-    g1.gain.linearRampToValueAtTime(0, startTime + duration)
-    g2.gain.setValueAtTime(0, startTime);
-    g2.gain.linearRampToValueAtTime(0.5, startTime + duration / 24);
-    g2.gain.linearRampToValueAtTime(0, startTime + duration)
 }
 
 function playPad(f, duration) {
@@ -95,8 +99,8 @@ function playPad(f, duration) {
     f1.connect(c.destination)
 
     f1.frequency.value = 100;
-    g1.gain.value = 0.5;
-    g2.gain.value = 0.5;
+    g1.gain.value = 0.1;
+    g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "sawtooth"
     o1.frequency.value = f;
@@ -107,10 +111,10 @@ function playPad(f, duration) {
     o2.start();
 
     g1.gain.setValueAtTime(0, startTime);
-    g1.gain.linearRampToValueAtTime(0.5, startTime + duration / 24);
+    g1.gain.linearRampToValueAtTime(0.1, startTime + duration / 24);
     g1.gain.linearRampToValueAtTime(0, startTime + duration)
     g2.gain.setValueAtTime(0, startTime);
-    g2.gain.linearRampToValueAtTime(0.5, startTime + duration / 24);
+    g2.gain.linearRampToValueAtTime(0.1, startTime + duration / 24);
     g2.gain.linearRampToValueAtTime(0, startTime + duration)
 }
 
@@ -131,43 +135,43 @@ function playLead(f, duration) {
     f1.frequency.value = 1500;
     f1.q = 50;
     f1.type = "lowpass";
-    g1.gain.value = 0.1;
-    g2.gain.value = 0.5;
+    g1.gain.value = 0.05;
+    g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "triangle"
     o1.frequency.value = 2 * f;
     o2.frequency.value = 4 * f;
-    //f1.frequency.exponentialRampToValueAtTime(2500, startTime + duration / 12)
 
     o1.start();
     o2.start();
 
     g1.gain.setValueAtTime(0, startTime);
-    g1.gain.linearRampToValueAtTime(0.3, startTime + duration / 64);
+    g1.gain.linearRampToValueAtTime(0.05, startTime + duration / 64);
     g1.gain.linearRampToValueAtTime(0, startTime + duration)
     g2.gain.setValueAtTime(0, startTime);
-    g2.gain.linearRampToValueAtTime(0.5, startTime + duration / 64);
+    g2.gain.linearRampToValueAtTime(0.1, startTime + duration / 64);
     g2.gain.linearRampToValueAtTime(0, startTime + duration)
 }
 
 
 function loadSamples(filename, sample) {
-    console.log("loading")
     const request = new XMLHttpRequest();
     request.open("GET", filename);
     request.responseType = "arraybuffer";
     request.onload = function () {
         let undecodedAudio = request.response;
         c.decodeAudioData(undecodedAudio, (data) => buffer[sample] = data);
-        console.log(buffer);
     };
     request.send();
 }
 
 function playSample(sample) {
+    const g = c.createGain();
+    g.gain.value=0.5;
     const source = c.createBufferSource();
     source.buffer = buffer[sample];
-    source.connect(c.destination);
+    source.connect(g);
+    g.connect(c.destination);
     source.start();
 }
 
