@@ -45,9 +45,9 @@ function getMessages() {
     db.collection("messages").where("read", "==", "N").orderBy("datetime", "desc").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             messageStack.push(doc.data())
-            db.collection('messages').doc(doc.id).update({
-                read: "Y"
-            });
+            //db.collection('messages').doc(doc.id).update({
+            //    read: "Y"
+            //});
         });
     });
     console.log(messageStack)
@@ -82,14 +82,14 @@ function start() {
             steps[i] = (steps[i] + 1) % message[i].length;
         }
 
-        playBass(getFrequency(pitch[alphabet.indexOf(trackSteps[0].innerText)])/4, 1)
-        playPad(getFrequency(pitch[alphabet.indexOf(trackSteps[4].innerText)])/2, 1)
-        playLead(getFrequency(pitch[alphabet.indexOf(trackSteps[5].innerText)]), 1)
-        if (triggerK[alphabet.indexOf(trackSteps[1].innerText)] === 1) playSample("short-kick")
-        if (triggerS[alphabet.indexOf(trackSteps[2].innerText)] === 1) playSample("snare")
-        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 1) playSample("close-hihat")
-        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 2) playSample("open-hihat")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] !== 0) playSample("perc")
+        if (trackSteps[0].innerText !== "") playBass(getFrequency(pitch[alphabet.indexOf(trackSteps[0].innerText)])/4, 1)
+        if (trackSteps[4].innerText !== "") playPad(getFrequency(pitch[alphabet.indexOf(trackSteps[4].innerText)])/2, 1)
+        if (trackSteps[5].innerText !== "") playLead(getFrequency(pitch[alphabet.indexOf(trackSteps[5].innerText)]), 1)
+        if (triggerK[alphabet.indexOf(trackSteps[1].innerText)] === 1 && trackSteps[1].innerText !== "") playSample("short-kick")
+        if (triggerS[alphabet.indexOf(trackSteps[2].innerText)] === 1 && trackSteps[2].innerText !== "") playSample("snare")
+        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 1 && trackSteps[3].innerText !== "") playSample("close-hihat")
+        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 2 && trackSteps[3].innerText !== "") playSample("open-hihat")
+        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] !== 0 && trackSteps[7].innerText !== "") playSample("perc")
 
         if (count++ % 16 === 15) bar++;
         console.log("bar " + bar)
