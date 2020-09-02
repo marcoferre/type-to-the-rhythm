@@ -13,7 +13,11 @@ function initializeEnvironment() {
     loadSamples("assets/media/samples/open-hihat.wav", "open-hihat");
     loadSamples("assets/media/samples/close-hihat.wav", "close-hihat");
     loadSamples("assets/media/samples/snare.wav", "snare");
-    loadSamples("assets/media/samples/cow-bell.wav", "perc");
+    loadSamples("assets/media/samples/cow-bell.wav", "cow-bell");
+    loadSamples("assets/media/samples/hi-tom.wav", "hi-tom");
+    loadSamples("assets/media/samples/low-tom.wav", "low-tom");
+    loadSamples("assets/media/samples/crash.wav", "crash");
+    loadSamples("assets/media/samples/clap.wav", "clap");
 }
 
 function resume() {
@@ -45,10 +49,10 @@ btnHats.onclick = function () {
 }
 
 btnPerc.onclick = function () {
-    playSample("perc");
+    playSample("cow-bell");
 }
 
-function playBass(f, duration) {
+function playBass(freq, duration, filter) {
     let startTime = c.currentTime;
 
     const o1 = c.createOscillator();
@@ -62,7 +66,7 @@ function playBass(f, duration) {
     g2.connect(f1);
     f1.connect(c.destination)
 
-    f1.frequency.value = 5000;
+    f1.frequency.value = filter;
     g1.gain.value = 0.1;
     g2.gain.value = 0.1;
     o1.type = "sawtooth"
@@ -84,7 +88,7 @@ function playBass(f, duration) {
 
 }
 
-function playPad(f, duration) {
+function playPad(freq, duration, filter) {
     let startTime = c.currentTime;
 
     const o1 = c.createOscillator();
@@ -105,7 +109,7 @@ function playPad(f, duration) {
     o2.type = "sawtooth"
     o1.frequency.value = f;
     o2.frequency.value = f + 5;
-    f1.frequency.exponentialRampToValueAtTime(2500, startTime + duration / 12)
+    f1.frequency.exponentialRampToValueAtTime(filter, startTime + duration / 12)
 
     o1.start();
     o2.start();
@@ -118,7 +122,7 @@ function playPad(f, duration) {
     g2.gain.linearRampToValueAtTime(0, startTime + duration)
 }
 
-function playLead(f, duration) {
+function playLead(freq, duration, filter) {
     let startTime = c.currentTime;
 
     const o1 = c.createOscillator();
@@ -132,7 +136,7 @@ function playLead(f, duration) {
     g2.connect(f1);
     f1.connect(c.destination)
 
-    f1.frequency.value = 1500;
+    f1.frequency.value = filter;
     f1.q = 50;
     f1.type = "lowpass";
     g1.gain.value = 0.05;
