@@ -71,8 +71,8 @@ function playBass(freq, duration, filter) {
     g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "triangle"
-    o1.frequency.value = f;
-    o2.frequency.value = 2 * f;
+    o1.frequency.value = freq;
+    o2.frequency.value = 2 * freq;
     f1.frequency.exponentialRampToValueAtTime(100, startTime + duration / 2)
 
 
@@ -107,8 +107,8 @@ function playPad(freq, duration, filter) {
     g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "sawtooth"
-    o1.frequency.value = f;
-    o2.frequency.value = f + 5;
+    o1.frequency.value = freq;
+    o2.frequency.value = freq + 5;
     f1.frequency.exponentialRampToValueAtTime(filter, startTime + duration / 12)
 
     o1.start();
@@ -143,8 +143,8 @@ function playLead(freq, duration, filter) {
     g2.gain.value = 0.1;
     o1.type = "sawtooth"
     o2.type = "triangle"
-    o1.frequency.value = 2 * f;
-    o2.frequency.value = 4 * f;
+    o1.frequency.value = 2 * freq;
+    o2.frequency.value = 4 * freq;
 
     o1.start();
     o2.start();

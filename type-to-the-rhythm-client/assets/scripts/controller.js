@@ -7,13 +7,14 @@ var messageStack = [{
 var db
 var message
 var trackSteps, steps, bar = 0
-const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`˜!.@#$%^&*()-_=+;\\|{}[] \":/?><".split("")
+const ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`˜!.@#$%^&*()-_=+;\\|{}[] \":/?><".split("")
 
-const pitch = [-24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12, null, -24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12, null]
-//                a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+const pitch = [-24, null, null, null, -17, null, -14, null, -13, -21, null, -19, -22, -6, -9, null, -7, -1, null, null, -3, null, null, null, -12, null, -24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12, null]
+
 const triggerK = [1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0]
 const triggerS = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1]
 const triggerH = [0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1, 0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1]
+const triggerF = [0, 55, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1, 0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1]
 const triggerP = [0, 0, 1, 0, 2, 1, 3, 0, 0, 3, 0, 5, 4, 4, 0, 0, 1, 5, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 1, 0, 2, 1, 3, 0, 0, 3, 0, 5, 4, 4, 0, 0, 1, 5, 0, 0, 0, 2, 2, 0, 2, 0]
 
 btnstart.onclick = start
@@ -47,9 +48,9 @@ function getMessages() {
     db.collection("messages").where("read", "==", "N").orderBy("datetime", "desc").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             messageStack.push(doc.data())
-            db.collection('messages').doc(doc.id).update({
-                read: "Y"
-            });
+            //db.collection('messages').doc(doc.id).update({
+            //    read: "Y"
+            //});
         });
     });
     console.log(messageStack)
@@ -84,18 +85,18 @@ function start() {
             steps[i] = (steps[i] + 1) % message[i].length;
         }
 
-        if (trackSteps[0].innerText !== "" && pitch[alphabet.indexOf(trackSteps[0].innerText)] != null) playBass(getFrequency(pitch[alphabet.indexOf(trackSteps[0].innerText)])/4, 1, (alphabet.indexOf(trackSteps[0].innerText) < 26) ? 2000 : 5000)
-        if (trackSteps[4].innerText !== "" && pitch[alphabet.indexOf(trackSteps[4].innerText)] != null) playPad(getFrequency(pitch[alphabet.indexOf(trackSteps[4].innerText)])/2, 0.5, (alphabet.indexOf(trackSteps[4].innerText) < 26) ? 2500 : 4000)
-        if (trackSteps[5].innerText !== "" && pitch[alphabet.indexOf(trackSteps[5].innerText)] != null) playLead(getFrequency(pitch[alphabet.indexOf(trackSteps[5].innerText)]), 0.5, (alphabet.indexOf(trackSteps[5].innerText) < 26) ? 1500 : 4000)
-        if (triggerK[alphabet.indexOf(trackSteps[1].innerText)] === 1 && trackSteps[1].innerText !== "") playSample("short-kick")
-        if (triggerS[alphabet.indexOf(trackSteps[2].innerText)] === 1 && trackSteps[2].innerText !== "") playSample("snare")
-        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 1 && trackSteps[3].innerText !== "") playSample("close-hihat")
-        if (triggerH[alphabet.indexOf(trackSteps[3].innerText)] === 2 && trackSteps[3].innerText !== "") playSample("open-hihat")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] === 1 && trackSteps[7].innerText !== "") playSample("clap")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] === 2 && trackSteps[7].innerText !== "") playSample("cow-bell")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] === 3 && trackSteps[7].innerText !== "") playSample("hi-tom")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] === 4 && trackSteps[7].innerText !== "") playSample("low-tom")
-        if (triggerP[alphabet.indexOf(trackSteps[7].innerText)] === 5 && trackSteps[7].innerText !== "") playSample("crash")
+        if (trackSteps[0].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[0].innerText)] != null) playBass(getFrequency(pitch[ALPHABET.indexOf(trackSteps[0].innerText)]) / 4, 1, (ALPHABET.indexOf(trackSteps[0].innerText) < 26) ? 2000 : 5000)
+        if (trackSteps[4].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[4].innerText)] != null) playPad(getFrequency(pitch[ALPHABET.indexOf(trackSteps[4].innerText)]) / 2, 0.5, (ALPHABET.indexOf(trackSteps[4].innerText) < 26) ? 2500 : 4000)
+        if (trackSteps[5].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[5].innerText)] != null) playLead(getFrequency(pitch[ALPHABET.indexOf(trackSteps[5].innerText)]), 0.5, (ALPHABET.indexOf(trackSteps[5].innerText) < 26) ? 1500 : 4000)
+        if (triggerK[ALPHABET.indexOf(trackSteps[1].innerText)] === 1 && trackSteps[1].innerText !== "") playSample("short-kick")
+        if (triggerS[ALPHABET.indexOf(trackSteps[2].innerText)] === 1 && trackSteps[2].innerText !== "") playSample("snare")
+        if (triggerH[ALPHABET.indexOf(trackSteps[3].innerText)] === 1 && trackSteps[3].innerText !== "") playSample("close-hihat")
+        if (triggerH[ALPHABET.indexOf(trackSteps[3].innerText)] === 2 && trackSteps[3].innerText !== "") playSample("open-hihat")
+        if (triggerP[ALPHABET.indexOf(trackSteps[7].innerText)] === 1 && trackSteps[7].innerText !== "") playSample("clap")
+        if (triggerP[ALPHABET.indexOf(trackSteps[7].innerText)] === 2 && trackSteps[7].innerText !== "") playSample("cow-bell")
+        if (triggerP[ALPHABET.indexOf(trackSteps[7].innerText)] === 3 && trackSteps[7].innerText !== "") playSample("hi-tom")
+        if (triggerP[ALPHABET.indexOf(trackSteps[7].innerText)] === 4 && trackSteps[7].innerText !== "") playSample("low-tom")
+        if (triggerP[ALPHABET.indexOf(trackSteps[7].innerText)] === 5 && trackSteps[7].innerText !== "") playSample("crash")
 
         if (count++ % 16 === 15) bar++;
         console.log("bar " + bar)
