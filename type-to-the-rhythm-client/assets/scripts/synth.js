@@ -2,7 +2,7 @@ var c;
 var data = {};
 var buffer = {};
 
-btnStartActx.onclick = function () {
+function startCtx () {
     initializeEnvironment()
 };
 
@@ -20,36 +20,8 @@ function initializeEnvironment() {
     loadSamples("assets/media/samples/clap.wav", "clap");
 }
 
-function resume() {
+function Resume() {
     c.resume();
-}
-
-btnBass.onclick = function () {
-    playBass(55, 1);
-}
-
-btnPad.onclick = function () {
-    playPad(110, 1);
-}
-
-btnLead.onclick = function () {
-    playLead(440, 1);
-}
-
-btnKick.onclick = function () {
-    playSample("short-kick");
-}
-
-btnSnare.onclick = function () {
-    playSample("snare");
-}
-
-btnHats.onclick = function () {
-    playSample("close-hihat");
-}
-
-btnPerc.onclick = function () {
-    playSample("cow-bell");
 }
 
 function playBass(freq, duration, filter) {

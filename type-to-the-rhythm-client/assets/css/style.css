@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     font-family: 'Roboto Mono', monospace;
     font-weight: lighter;
+    background-color: lightgreen;
 }
 
 html {
@@ -21,11 +22,11 @@ html {
 }
 
 #side-container {
-    width: 30%;
+    width: calc(30% - .5em);
     height: 100%;
     float: right;
     box-sizing: border-box;
-    background-color: lightblue;
+    background-color: black;
     /*REMOVE ONLY DEBUG*/
     display: flex;
     flex-direction: column;
@@ -71,11 +72,11 @@ html {
     font-style: italic;
 }
 
-.text-name{
+.text-name {
     font-weight: normal;
 }
 
-.track-step{
+.track-step {
     font-weight: normal;
 }
 
@@ -112,3 +113,56 @@ html {
 .wide-100 {
     width: 100%;
 }
+
+#title {
+    height: 30%;
+    background-color: black;
+    padding: 1em;
+}
+
+#title > h1 {
+    text-align: center;
+    width: 100%;
+}
+
+#title > p {
+    margin-top: 2em;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#title > p > a {
+    color: lightgreen
+}
+
+#btnstart {
+    font-family: 'Roboto Mono', monospace;
+    position: relative;
+    vertical-align: top;
+    width: 80%;
+    height: 50px;
+    padding: 0;
+    font-size: 22px;
+    color: lightgreen;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    background: black;
+    border: 1px;
+    border-style: solid;
+    border-color: lightgreen;
+    cursor: pointer;
+    -webkit-box-shadow: inset 0 -2px #242424;
+    box-shadow: inset 0 -2px #242424;
+}
+
+#btnstart:active {
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+

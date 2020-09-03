@@ -1,8 +1,9 @@
 var count = 0;
 var bpm = 80 * 4;
 var messageStack = [{
-    from: "Steven Wilson",
-    text: "One of The Wonder of The World is",
+    from: "Renato Bresciani",
+
+    text: "Good morning Boss, sorry I am Late!",
 }]
 var db
 var message
@@ -17,7 +18,15 @@ const triggerH = [0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0,
 const triggerF = [0, 55, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1, 0, 1, 2, 1, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 2, 1, 0, 0, 2, 2, 0, 1]
 const triggerP = [0, 0, 1, 0, 2, 1, 3, 0, 0, 3, 0, 5, 4, 4, 0, 0, 1, 5, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 1, 0, 2, 1, 3, 0, 0, 3, 0, 5, 4, 4, 0, 0, 1, 5, 0, 0, 0, 2, 2, 0, 2, 0]
 
-btnstart.onclick = start
+btnstart.onclick = function(){
+    if(btnstart.innerText === "start the machine"){
+        Start()
+        btnstart.innerText = "stop"
+    } else {
+        Stop()
+    }
+
+}
 
 dbConnection()
 getMessages()
@@ -40,8 +49,25 @@ function dbConnection() {
     db = firebase.firestore();
 }
 
-function getFrequency(semitones){
-    return 440 * Math.pow(2, semitones/12);
+function getScale(datetime) {
+    let date = new Date(datetime);
+    let time = date.toLocaleTimeString()
+    console.log(time)
+    if (time < '08:00:00') {
+        return "locrian";
+    } else if (time < '11:00:00') {
+        return "dorian";
+    } else if (time < '14:00:00') {
+        return "ionian";
+    } else if (time < '17:00:00') {
+        return "mixolydian";
+    } else if (time < '20:00:00') {
+        return "lydian";
+    } else if (time < '24:00:00') {
+        return "phrygian";
+    } else if (time < '04:00:00') {
+        return "aeolian";
+    }
 }
 
 function getMessages() {
@@ -76,7 +102,8 @@ function nextMessage() {
     getMessages();
 }
 
-function start() {
+function Start() {
+    startCtx()
     nextMessage();
     setInterval(function () {
 
@@ -106,4 +133,9 @@ function start() {
         }
 
     }, 60 / bpm * 1000)
+}
+
+function Stop(){
+    Resume()
+    location.reload();
 }
