@@ -1,16 +1,18 @@
 var count = 0;
 var bpm = 80 * 4;
 var messageStack = [{
-    from: "Renato Bresciani",
-
-    text: "Good morning Boss, sorry I am Late!",
+    from: "Steven Wilson",
+    datetime: "04-09-2020 19:49:00",
+    text: "one of the wonder of the world",
 }]
+console.log(messageStack)
 var db
-var message
+var message, datetime
 var trackSteps, steps, bar = 0
 const ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`˜!.@#$%^&*()-_=+;\\|{}[] \":/?><".split("")
 
-const pitch = [-24, null, null, null, -17, null, -14, null, -13, -21, null, -19, -22, -6, -9, null, -7, -1, null, null, -3, null, null, null, -12, null, -24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12, null]
+const grades = [6, null, null, null, 3, null, 4, null, 5, 1, null, 2, 7, 3, 1, null, 2, 5, null, null, 4, null, null, null, 6, null, 6, null, null, null, 3, null, 4, null, 5, 1, null, 2, 7, 3, 1, null, 2, 5, null, null, 4, null, null, null, 6, null]
+//const pitch = [-24, null, null, null, -17, null, -14, null, -13, -21, null, -19, -22, -6, -9, null, -7, -1, null, null, -3, null, null, null, -12, null, -24, null, null, null, -17, null, -15, null, -13, -21, null, -19, -22, -5, -9, null, -7, -1, null, null, -3, null, null, null, -12, null]
 
 const triggerK = [1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0]
 const triggerS = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1]
@@ -52,7 +54,7 @@ function dbConnection() {
 function getScale(datetime) {
     let date = new Date(datetime);
     let time = date.toLocaleTimeString()
-    console.log(time)
+
     if (time < '08:00:00') {
         return "locrian";
     } else if (time < '11:00:00') {
@@ -89,6 +91,8 @@ function nextMessage() {
         textMessage.innerText = "\"" + messageStack[0].text + "\""
 
         message = messageStack[0].text.replace("  ", " ").split(" ");
+        datetime = messageStack[0].datetime
+        console.log(getScale(datetime))
 
         trackSteps = document.querySelectorAll(".track-step")
         trackSteps.forEach(e => e.innerText = "")
@@ -112,9 +116,9 @@ function Start() {
             steps[i] = (steps[i] + 1) % message[i].length;
         }
 
-        if (trackSteps[0].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[0].innerText)] != null) playBass(getFrequency(pitch[ALPHABET.indexOf(trackSteps[0].innerText)]) / 4, 1, (ALPHABET.indexOf(trackSteps[0].innerText) < 26) ? 2000 : 5000)
-        if (trackSteps[4].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[4].innerText)] != null) playPad(getFrequency(pitch[ALPHABET.indexOf(trackSteps[4].innerText)]) / 2, 0.5, (ALPHABET.indexOf(trackSteps[4].innerText) < 26) ? 2500 : 4000)
-        if (trackSteps[5].innerText !== "" && pitch[ALPHABET.indexOf(trackSteps[5].innerText)] != null) playLead(getFrequency(pitch[ALPHABET.indexOf(trackSteps[5].innerText)]), 0.5, (ALPHABET.indexOf(trackSteps[5].innerText) < 26) ? 1500 : 4000)
+        if (trackSteps[0].innerText !== "" && grades[ALPHABET.indexOf(trackSteps[0].innerText)] != null) playBass(getFrequency(ROOT, grades[ALPHABET.indexOf(trackSteps[0].innerText)], getScale(datetime), ((ALPHABET.indexOf(trackSteps[0].innerText).between(0, 13)) || (ALPHABET.indexOf(trackSteps[0].innerText).between(26, 52))) ? -4 : -3), 1, (ALPHABET.indexOf(trackSteps[0].innerText) < 26) ? 2000 : 5000)
+        if (trackSteps[4].innerText !== "" && grades[ALPHABET.indexOf(trackSteps[4].innerText)] != null) playPad(getFrequency(ROOT, grades[ALPHABET.indexOf(trackSteps[4].innerText)], getScale(datetime), ((ALPHABET.indexOf(trackSteps[4].innerText).between(0, 13)) || (ALPHABET.indexOf(trackSteps[4].innerText).between(26, 52))) ? -3 : -2), 0.5, (ALPHABET.indexOf(trackSteps[4].innerText) < 26) ? 2500 : 4000)
+        if (trackSteps[5].innerText !== "" && grades[ALPHABET.indexOf(trackSteps[5].innerText)] != null) playLead(getFrequency(ROOT, grades[ALPHABET.indexOf(trackSteps[5].innerText)], getScale(datetime), ((ALPHABET.indexOf(trackSteps[5].innerText).between(0, 13)) || (ALPHABET.indexOf(trackSteps[5].innerText).between(26, 52))) ? -1 : 0), 0.5, (ALPHABET.indexOf(trackSteps[5].innerText) < 26) ? 1500 : 4000)
         if (triggerK[ALPHABET.indexOf(trackSteps[1].innerText)] === 1 && trackSteps[1].innerText !== "") playSample("short-kick")
         if (triggerS[ALPHABET.indexOf(trackSteps[2].innerText)] === 1 && trackSteps[2].innerText !== "") playSample("snare")
         if (triggerH[ALPHABET.indexOf(trackSteps[3].innerText)] === 1 && trackSteps[3].innerText !== "") playSample("close-hihat")
@@ -134,6 +138,12 @@ function Start() {
 
     }, 60 / bpm * 1000)
 }
+
+Number.prototype.between = function(a, b) {
+    var min = Math.min.apply(Math, [a, b]),
+        max = Math.max.apply(Math, [a, b]);
+    return this > min && this < max;
+};
 
 function Stop(){
     Resume()
