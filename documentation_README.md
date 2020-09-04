@@ -18,4 +18,4 @@ Create rhythmic patterns and choose the most suitable harmonizations for your ph
 # What if we have not convinced you yet?
 Just look at the infinite possibilities of the pattern you can create!
 
-https://www.youtube.com/embed/sv6cglUncH4
+https://www.youtube.com/embed/yt7Gx4UmfVU
