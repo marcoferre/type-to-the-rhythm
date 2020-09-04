@@ -1,7 +1,7 @@
 const ROOT = "E"
 
 const SCALES = {
-        "ionian": [0, 2, 4, 5, 7, 9, 11],
+        "ionian": [0, 2, 4, 5, 7, 9, 11], //semitones distance from root
         "dorian": [0, 2, 3, 5, 7, 9, 10],
       "phrygian": [0, 1, 3, 5, 7, 8, 10],
         "lydian": [0, 2, 4, 6, 7, 9, 11],
@@ -25,12 +25,6 @@ const FREQS = {
     "G#": 830.61,
 }
 
-function _getFrequency(semitones){
-    return 440 * Math.pow(2, semitones/12);
-}
-
 function getFrequency(root, grade, scale, transpose) {
-    //console.log(2 + "^" + transpose * 12  + "12   " + FREQS[root] * Math.pow(2, transpose * 12 + SCALES[scale][grade-1] / 12));
-    console.log(grade)
     return FREQS[root] * Math.pow(2, (transpose * 12 + SCALES[scale][grade-1]) / 12);
 }

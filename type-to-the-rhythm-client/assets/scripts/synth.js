@@ -4,7 +4,7 @@ var buffer = {};
 
 function startCtx () {
     initializeEnvironment()
-};
+}
 
 function initializeEnvironment() {
     c = new AudioContext()
@@ -47,7 +47,6 @@ function playBass(freq, duration, filter) {
     o2.frequency.value = 2 * freq;
     f1.frequency.exponentialRampToValueAtTime(100, startTime + duration / 2)
 
-
     g1.gain.setValueAtTime(0, startTime);
     g1.gain.linearRampToValueAtTime(0.1, startTime + duration / 32);
     g1.gain.linearRampToValueAtTime(0, startTime + duration)
@@ -57,7 +56,6 @@ function playBass(freq, duration, filter) {
 
     o1.start();
     o2.start();
-
 }
 
 function playPad(freq, duration, filter) {
