@@ -10,7 +10,7 @@ Create rhythmic patterns and choose the most suitable harmonizations for your ph
 # How to use it
   - search for @typeToTheRhythm_bot on telegram
   - activate the bot itself
-  - go to the website https://typetotherhythm.it/ 
+  - go to the website https://typetotherhythm.it/ (Chrome server is higly recommended)
   - start writing messages! The first eight words will be part of the multitrace synth
   - enjoy <3
 
